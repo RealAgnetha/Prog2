@@ -14,7 +14,55 @@ import java.io.IOException;
 
 public class TCPFileExchangerUI {
 
+
+    /**Marinas Input**/
+
+    private String filename = "";
+    private String hostname;
+    private int port;
+    TCPFileExchange tcpFileExchanger = new TCPFileExchangeImpl();
+
+
+    public void run(String[] args) throws IOException {
+        String portString = null;
+        hostname = args[1];
+        if(args.length == 2) { // > case: serve
+            filename = args[0];
+            // Hier gab es port Probleme -- port war 0 nach dem Parsen, weil es eigtl leer war
+            port = Integer.parseInt(args[1]);
+            //System.out.println("port" + portString);
+            listeningAsServer();
+        } else if(args.length == 3) { // > case: connect
+            filename = args[0];
+            port = Integer.parseInt(args[2]);
+            connectingAsClient();
+        }
+    }
+    private void connectingAsClient() throws IOException {
+        System.out.println("Sending...");
+        System.out.println("filename:\t" + filename);
+        System.out.println("port:\t" + port);
+        System.out.println("hostname:\t" + hostname);
+        tcpFileExchanger.sendFile2Host(filename, hostname, port);
+    }
+    private void listeningAsServer() throws IOException {
+        System.out.println("Waiting to receive...");
+        System.out.println("filename:\t" + filename);
+        System.out.println("port:\t" + port);
+        tcpFileExchanger.receiveFile(filename, port);
+    }
+
     public static void main(String[] args) throws IOException {
+        TCPFileExchangerUI ui = new TCPFileExchangerUI();
+        ui.run(args);
+    }
+
+
+}
+    /****/
+
+    //OLD:
+ /*  public static void main(String[] args) throws IOException {
 
         if(args.length < 2) {
             System.err.println("at least 2 arguments required");
@@ -46,7 +94,4 @@ public class TCPFileExchangerUI {
             tcpFileExchanger.sendFile2Host(filename, hostname, port);
         }
 
-    }
-
-
-}
+    } */

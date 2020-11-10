@@ -17,6 +17,9 @@ public class FileExchanger implements FileSender, FileReceiver {
 
     @Override
     public void receiveFile(String filename, InputStream is) throws IOException {
+        // Was im InputStream reinkommt wird in filename reingeschrieben
+        System.out.println("Writing content to received file...");
+
         // Receive content from input stream, write to local file
         FileOutputStream fos = new FileOutputStream(filename);
 
